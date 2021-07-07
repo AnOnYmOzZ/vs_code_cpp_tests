@@ -30,11 +30,11 @@ public:
       ;
   }
 
-  char* getObjName(){
+  char* getName(){
       return name;
   }
 
-  void getObjName(char* c_out, int len)
+  void getName(char* c_out, int len)
   {
       if (c_out != NULL) strlcpy(c_out, name, len);
   }

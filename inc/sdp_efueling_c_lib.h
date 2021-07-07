@@ -19,7 +19,7 @@
 
 #include "Domain_c.h"
 
-class Button;
+class Machine;
 /**
  * ------------------------
  * States and events
@@ -44,22 +44,22 @@ typedef struct{
 
 
 /** Base State class */
-class BtnStateClass: public DomainClass{
+class BaseState: public DomainClass{
 
 public:
-    Button* button_; /**< "context" in state pattern terminology */
-    void setButton(Button* btn);
+    Machine* machine; /**< "context" in state pattern terminology */
+    void setButton(Machine* btn);
 
-    virtual void entry( BtnStateClass *from);
+    virtual void entry( BaseState *from);
     virtual void activity( Events_st* evt) = 0;
-    virtual void exit(BtnStateClass* to);
+    virtual void exit(BaseState* to);
 
-    BtnStateClass();
-    virtual ~BtnStateClass();
+    BaseState();
+    virtual ~BaseState();
 
     /** states pointers */
-    static BtnStateClass* otto;
-    static BtnStateClass* manua;
+    static BaseState* otto;
+    static BaseState* manua;
 };
 
 
@@ -68,13 +68,13 @@ public:
  *                              They have virtual function that carry out specific tasks
  */
 
-class Auto: public BtnStateClass{
+class Auto: public BaseState{
 public:
     Auto(){setObjName(__FUNCTION__);}
     void activity( Events_st* evt = NULL);
 };
 
-class Manual: public BtnStateClass
+class Manual: public BaseState
 {
 public:
     Manual(){setObjName(__FUNCTION__);}
@@ -99,18 +99,18 @@ public:
  *
  */
 
-class Button: public DomainClass{
+class Machine: public DomainClass{
 //  friend class states;
 
 public:
-    Button(const char* objName, BtnStateClass* d_state_);
-    Button();
-    ~Button();
+    Machine(const char* objName, BaseState* d_state_);
+    Machine();
+    ~Machine();
 
     /**/
-    BtnStateClass* current_state;
+    BaseState* current_state;
     void init();
-    void state_transition(BtnStateClass* to);
+    void state_transition(BaseState* to);
     int operate();
 
 };

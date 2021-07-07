@@ -29,7 +29,7 @@ void clrscr(){
 }
 
 int main(){
-    Button *d_ = new Button();
+    Machine *d_ = new Machine();
     int ret;
     do{
         ret = d_->operate();
@@ -38,6 +38,6 @@ int main(){
     while( ret != 9);
 
     system("pause"); 
-    
+
     return 0;
 }

@@ -27,98 +27,100 @@
 Auto auto_state;
 Manual manual_state;
 
-BtnStateClass* BtnStateClass::otto = &auto_state;
-BtnStateClass* BtnStateClass::manua = &manual_state;
+BaseState* BaseState::otto = &auto_state;
+BaseState* BaseState::manua = &manual_state;
 
 
 
-void BtnStateClass::setButton(Button* d){
-	button_ = d;
+void BaseState::setButton(Machine* d){
+	machine = d;
 }
 
-void BtnStateClass::entry(BtnStateClass* from)
+void BaseState::entry(BaseState* from)
 {
-	printf("state set: %s", getObjName() );
+	printf("state set: %s", getName() );
 }
 
-void BtnStateClass::exit(BtnStateClass* to)
+void BaseState::exit(BaseState* to)
 {
 }
 
-BtnStateClass::BtnStateClass(){
-    button_ = NULL;
+BaseState::BaseState(){
+    machine = NULL;
 }
 
-BtnStateClass::~BtnStateClass(){
+BaseState::~BaseState(){
     ;
 }
 
 
 /**
- * @class: Idle, busy, off : 	derived class of DeviceStateClass,
+ * @class: Auto, Manual : 	derived class of BaseClass,
  * 								They have virtual function that carry out specific tasks
+ * 
+ * This is where the most of the work has to be done 
  */
+
 
 void Auto::activity(Events_st* evt){
 	//you can allocate memory here "new Busy" or use a pointer to preallocated variables &busy
 	if (evt->pump == MANUAL){
-		button_ -> state_transition(manua);
+		machine -> state_transition(manua);
 	}
 	else if (evt->btn == NOT_PRESSED){
-		button_-> state_transition( manua);
+		machine-> state_transition( manua);
 	}
 
 }
 
 void Manual::activity( Events_st* evt ){
 	if (evt->pump == AUTO){
-		button_ -> state_transition(otto);
+		machine -> state_transition(otto);
 	}
 	else if (evt->btn == PRESSED){
-		button_-> state_transition(otto);
+		machine-> state_transition(otto);
 	}
 }
 
 
 /**
  * ------------------------
- * Context: States manager
+ * Machine: Context / States manager
  * ------------------------
  */
 
 /* Initialize current_state to a null ptr 'current_state(nullptr)' before assigning it a default value*/
-Button::Button(const char* objName, BtnStateClass* d_state_): current_state(nullptr){
+Machine::Machine(const char* objName, BaseState* d_state_): current_state(nullptr){
     setObjName(objName);
     state_transition(d_state_);
 }
 
-Button::Button(){
+Machine::Machine(){
     setObjName(__FUNCTION__);
     this->init();
-    state_transition( BtnStateClass::manua );
+    state_transition( BaseState::manua );
 }
 
-Button::~Button(){
+Machine::~Machine(){
     ;
 }
 
-void Button::init(){
-    this->current_state = BtnStateClass::manua;
+void Machine::init(){
+    this->current_state = BaseState::manua;
 }
 
-void Button::state_transition(BtnStateClass* to){
+void Machine::state_transition(BaseState* to){
 //  if(current_state != nullptr)   //don't bother deleting memory since we are not using dynamic memory
 //      delete current_state; //i.e. deallocate the memory at current_state before assiging a new one
 
-    //You can also call the exit() function of the "from" state 
-    BtnStateClass* from = this->current_state;
+    BaseState* from = this->current_state;
     this->current_state = to;
     from->exit(to);
     this->current_state->setButton(this);
     this->current_state->entry(from);
 }
 
-int Button::operate(){
+int Machine::operate(){
     int mode = 0, btn = 0;
     char str[100] = {0};
     char ch = '\0';
