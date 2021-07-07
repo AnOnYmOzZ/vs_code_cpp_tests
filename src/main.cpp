@@ -12,7 +12,7 @@
  *
  */
 
-#include "..\inc\sdp_efueling_c_lib.h"
+#include "..\inc\basestate_n_machine.h"
 #include "ctype.h"
 #include "string.h"
 #include "stddef.h"
@@ -29,15 +29,20 @@ void clrscr(){
 }
 
 int main(){
-    Machine *d_ = new Machine();
-    int ret;
+    Machine *mach = new Machine();
+    int input;
     do{
-        ret = d_->operate();
-        if (ret == 'c') clrscr();
+        printf( "\n Enter mode and btn (separated by space): ");
+        scanf("%d", &input);
+
+        Events_st evt = { (ep_intn_evt_en)input, 0};
+        mach->current_state->on_event( &evt );
     }
-    while( ret != 9);
+    while( input != 99);
 
     system("pause"); 
 
     return 0;
 }
+
+
