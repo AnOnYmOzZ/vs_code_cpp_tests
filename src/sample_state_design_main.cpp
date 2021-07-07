@@ -12,7 +12,7 @@
  *
  */
 
-#include "..\inc\sdp_efueling_c_lib.h"
+#include "..\inc\sample_state_design.h"
 #include "ctype.h"
 #include "string.h"
 #include "stddef.h"

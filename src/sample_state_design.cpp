@@ -21,7 +21,7 @@
 #include <wchar.h>
 
 /** user library */
-#include "..\inc\sdp_efueling_c_lib.h"
+#include "..\inc\sample_state_design.h"
 
 /** Instantiating the states */
 Auto auto_state;
