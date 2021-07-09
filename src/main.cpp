@@ -12,11 +12,10 @@
  *
  */
 
-#include "..\inc\basestate_n_machine.h"
-#include "ctype.h"
-#include "string.h"
-#include "stddef.h"
-#include "stdio.h"
+#include "ep_main.h"
+#include "stringToHex.h"
+
+
 
 void clrscr(){
     #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
@@ -29,19 +28,16 @@ void clrscr(){
 }
 
 int main(){
-    Machine *mach = new Machine();
-    int input;
-    do{
-        printf( "\n Enter mode and btn (separated by space): ");
-        scanf("%d", &input);
+    
+    uint8_t hex[]={0x88, 0x3e,0xfa};
 
-        Events_st evt = { (ep_intn_evt_en)input, 0};
-        mach->current_state->on_event( &evt );
-    }
-    while( input != 99);
+    uint8_t strOut[300]={0};
+    uint8_t hexOut[30]={0};
 
-    system("pause"); 
+    hexToString(hex, sizeof(hex), strOut, sizeof(strOut));
+    hexFromString(strOut, strlen((const char*)strOut), hexOut, sizeof(hexOut));
 
+    system("pause");
     return 0;
 }
 

@@ -12,6 +12,13 @@
  * 			COPYRIGHT NOTICE: (c) 2020 fuelmetrics.  All rights reserved.
  */ 
 
+#define ep_log printf
+#include "Domain_c.h"
+#include "ctype.h"
+#include "string.h"
+#include "stddef.h"
+#include "stdint.h"
+#include "stdio.h"
 
 #ifndef MAIN_H_
 #define MAIN_H_
