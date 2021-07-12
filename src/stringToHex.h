@@ -19,13 +19,13 @@
 
 
 int 
-hexToString(uint8_t* hex
+hexToString(const uint8_t* hex
 		, uint16_t h_len
 		, uint8_t * hxOut
 		, uint16_t hxOutLen);
 
 int
-hexFromString(uint8_t* hex
+hexFromString(const uint8_t* hex
 		, uint16_t h_len
 		, uint8_t * hxOut
 		, uint16_t hxOutSize);

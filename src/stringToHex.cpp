@@ -25,7 +25,7 @@
 
 /** String to hex and vice versa */
 int
-hexToString(uint8_t* hx_in
+hexToString(const uint8_t* hx_in
 		, uint16_t h_len
 		, uint8_t * hxOut
 		, uint16_t hxOutSize)
@@ -47,8 +47,13 @@ hexToString(uint8_t* hx_in
 }
 
 /** String to hex and vice versa */
+const char nib[][16]= {{0,10,11,12,13,14,15},{0,1,2,3,4,5,6,7,8,9}};
+const char f = ~(0x3f);
+const char f2 = 0x0f;
+//16 is the maximum value of this guy
+
 int
-hexFromString(uint8_t* hex
+hexFromString(const uint8_t* hex
 		, uint16_t h_len
 		, uint8_t * hxOut
 		, uint16_t hxOutSize)
@@ -59,14 +64,19 @@ hexFromString(uint8_t* hex
 		return -1;
 	}
 
-
 	memset(hxOut, 0, hxOutSize);
-    int i;
-	for(i=0; i<h_len; i++){
-		int ret = sscanf( (const char*)hex+(i*2), "%02x", hxOut+i);
-        if (ret != 1) break;
-        ep_log("[%s]scanned: %d, hexvalue: %x\n", __FUNCTION__, ret, hxOut[i]);
+    int i=0, ret=0, j=0;
+	while(i<h_len){
+		//TODO: test algorithm speed as compared to 
+		hxOut[i/2] = (nib[ !(hex[i] & f) ][ hex[i] & f2 ] << 4) 
+		|  (nib[ !( hex[i+1] & f) ][ hex[i+1] & f2 ] ) ;
+
+		// ret = sscanf( (const char*)hex+(i), "%02x", hxOut+(i/2));
+        // if (ret != 1) break;
+        ep_log("[%s]scanned: %d, hexvalue: %x\n", __FUNCTION__, ret, hxOut[i/2]);
+		i = i+2;
+		j++;
 	}
-    return i;
+    return j;
 }
 
