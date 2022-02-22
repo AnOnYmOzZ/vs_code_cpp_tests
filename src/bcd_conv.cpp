@@ -4,7 +4,7 @@
 
 #include <cstring>
 #include "bcd_conv.h"
-#include "ep_types.h" 
+#include "ep_main.h"
 #include "math.h"
 
 /*	*************************************************************
@@ -17,8 +17,8 @@
 unsigned long bcd_to_int(u8* array, u32 size){
     unsigned long result = 0;
     for (int i = ((size*2)-1); i > -1; i-=2){
-        unsigned long a = (long unsigned)pow(10,i-1);
-        unsigned long b = (long unsigned)pow(10,i);
+        unsigned long a = (long unsigned)pow(10.0,i-1);
+        unsigned long b = (long unsigned)pow(10.0,i);
         result += (((*array & 0xf0) >> 4) * b);
         result += ((*array & 0x0f) * a);
         //		TRACE_BP("debug naani: in result: %lu [%d] array: %x a: %lu, b: %lu   cal: %lu", result, result, *array, a, b, (((*array & 0xf0) >> 4) * b));
@@ -55,14 +55,14 @@ int bcd_from_int (int Decimal, unsigned char* res2, int size)
 
     for (uint32_t i=0; i<count; i++){
         res2[size-1] = res1[i];
-        if (--size <= 0) ;//break;
+        if (--size <= 0) break;
     }
     return count;
 }
 
 int bcd_from_float (double flt, int dpoint, unsigned char* res2, int size)
 {
-    int dec = flt * (pow(10,dpoint));
+    int dec = flt * (pow(10.0,dpoint));
     return bcd_from_int(dec, res2, size);
 }
 
@@ -76,5 +76,6 @@ int bcd_from_numstring(char* numstr, int len, unsigned char* res2, int ressize)
 
 /* This converts from decimal to float as required by the pump */
 double d2f(long unsigned dec, int dp){
-    return (dec / pow(10,dp) );
+    return (dec / pow(10.0,dp) );
 }
+
