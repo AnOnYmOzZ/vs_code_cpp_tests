@@ -22,9 +22,8 @@ int main(){
     char a[3] = {0};
     int i = 49384789;
 
-    bcd_from_int (i, a, sizeof(a));
-    printf("A: %")
-
+    bcd_from_int (i, (uint8_t*)a, sizeof(a));
+    printf("A: %x %x %x", a[0], a[1], a[2]);
 
     // system("pause"); 
 
